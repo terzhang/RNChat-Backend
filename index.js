@@ -29,15 +29,48 @@ const connect = require('./dbconnection');
 
 
 const Chat = mongoose.model('Chat');
+// socket.io cheat sheet: https://socket.io/docs/emit-cheatsheet/
+// handler for when a socket connection is established
 io.on('connection', socket => {
+  // While connected...
+  // do callback for this socket connection
   console.log('User connected');
-  // turn the socket on at this connection
-  socket.on('chat message', msg => {
+
+  // socket doc: https://socket.io/docs/server-api/#Socket
+  // the on method: https://socket.io/docs/server-api/#socket-on-eventName-callback
+
+  // handler for 'disconnect' event
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+
+  // handler for 'typing' event
+  socket.on('typing', data => {
     console.log(msg);
-    io.emit('chat message', msg); // emit msg to all client listening to this socket.io server
+    // adding braodcast flag before emit will send data to everyone except the sender
+    // https://socket.io/docs/server-api/#Flag-‘broadcast’
+    socket.broadcast.emit('notifyTyping', {
+      user: data.user,
+      message: data.message
+    });
+  });
+
+  // handler for chat message events
+  socket.on('chat message', msg => {
+    // broadcast received message to everyone in port except the sender
+    io.broadcast.emit('chat message', msg);
+    console.log('Broadcasted msg: ', msg);
+
+    /* 
+    // make new Chat document with chatSchema
+    const chatMessage = new Chat({ message: msg, sender: 'Anonymous' });
+    // save it to the chat collection in the database
+    chatMessage.save();
+    */
   });
 });
 
+// start listening at the port
 server.listen(port, () => {
   console.log('server running on port ' + port);
 });
