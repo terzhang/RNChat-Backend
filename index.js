@@ -1,5 +1,3 @@
-const express = require('express');
-const app = express();
 // register models to Mongoose
 require('./models/Chat');
 require('./models/User');
@@ -12,6 +10,10 @@ const app = express(); // instance of express app
 // import routes
 const chatRouter = require('./route/chatRoute');
 const loginRouter = require('./route/loginRoute');
+// middlewares
+const reqAuth = require('./middleware/reqAuth');
+const socketAuth = require('./middleware/socketAuth');
+
 // create http server using express
 const server = require('http').createServer(app);
 
@@ -33,6 +35,18 @@ app.use(express.static(__dirname + '/public')); // serve static file in the /pub
 // database connection
 const connect = require('./dbconnection');
 
+// GET '/' root endpoint handler (meaning any GET request)
+// perform callback(s): check requester's authorization with reqAuth first
+// then another callback to send back response
+// https://expressjs.com/en/5x/api.html#app.get.method
+app.get(
+  '/',
+  (req, res, next) => requireAuth(req, res, next),
+  (req, res) => {
+    // req === { user: {email: "...", password: "..."} }
+    res.send(`Email: ${req.user.email}`); // (res)pond with message back to requester
+  }
+);
 
 const Chat = mongoose.model('Chat');
 // socket.io cheat sheet: https://socket.io/docs/emit-cheatsheet/
