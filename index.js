@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+// register models to Mongoose
+require('./models/Chat');
+require('./models/User');
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 port = 3000;
