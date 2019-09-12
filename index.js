@@ -49,6 +49,11 @@ app.get(
 );
 
 const Chat = mongoose.model('Chat');
+
+// Middleware for socket io:
+// authenticate socket and give it callback function
+io.use((socket, next) => socketAuth(socket, next));
+
 // socket.io cheat sheet: https://socket.io/docs/emit-cheatsheet/
 // handler for when a socket connection is established
 io.on('connection', socket => {
