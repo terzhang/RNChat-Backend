@@ -9,6 +9,9 @@ const mongoose = require('mongoose');
 // set up express app instance
 const express = require('express'); // express module
 const app = express(); // instance of express app
+// import routes
+const chatRouter = require('./route/chatRoute');
+const loginRouter = require('./route/loginRoute');
 // create http server using express
 const server = require('http').createServer(app);
 
@@ -20,6 +23,9 @@ const port = process.env.PORT || 3000; // assign port
 // Middlewares:
 // Data body parser for data going through the express app
 app.use('/', express.json); // using built-in express.json as parser
+// middleware for each path
+app.use('/chats', chatRouter);
+app.use('/login', loginRouter);
 
 /* // Static files does not need to be generated, modified, or processed before delivery.L
 app.use(express.static(__dirname + '/public')); // serve static file in the /public directory */
