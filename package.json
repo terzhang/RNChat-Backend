@@ -8,8 +8,12 @@
   "author": "Terry Zhang",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.5",
     "express": "^4.17.1",
     "global": "^4.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.0",
     "nodemon": "^1.19.2",
     "socket.io": "^2.2.0"
   }
