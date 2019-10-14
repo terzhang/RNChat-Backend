@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// pre-save hook executed  (using callback function() to access to 'this')
+// pre-SAVE hook that get executed before user model is saved (using callback function() to access to 'this')
+// before saving, we hash and salt the password and save that instead of the password.
 userSchema.pre('save', function(next) {
   const user = this; // get user model instance from user schema (model instance = Mongoose document)
   if (!user.isModified('password')) {

@@ -2,11 +2,8 @@
 const mongoose = require('mongoose');
 // replace mongoose's promise library with bluebird's
 mongoose.Promise = require('bluebird');
-
 // url to MongoDB database
-/* const url = 'mongodb://localhost:27017/chat'; */
-const url =
-  'mongodb+srv://admin:130135793@main-lkpdj.azure.mongodb.net/test?retryWrites=true&w=majority';
+const url = require('./constants/mongodbUrl');
 
 // establish a connection from mongoose to the database
 // https://mongoosejs.com/docs/connections.html

@@ -16,7 +16,8 @@ const reqAuth = (req, res, next) => {
   // Note: authorization === `Bearer ${token}`
   const STR_SPACE = ' ';
   const STR_EMPTY = '';
-  const token = authorization.replace('Bearer' + STR_SPACE, STR_EMPTY); // cut out everything before token to get token on its own.
+  // replace everything before token with an empty string in Authorization field.
+  const token = authorization.replace('Bearer' + STR_SPACE, STR_EMPTY);
 
   // verify jwt with key, then use its output as callback to function
   jwt.verify(token, 'SECRET_KEY', async (error, payload) => {
